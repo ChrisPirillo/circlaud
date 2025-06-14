@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circlaud - An Interactive Ambient Sound Experience</title>
+    <meta name="description" content="Immerse yourself in Circlaud, a generative audio-visual experience. Click to create evolving soundscapes and colorful blooms. Perfect for relaxation, focus, or creative inspiration.">
+    <link rel="canonical" href="https://pirillo.com/arcade/circlaud.html">
+
+    <meta property="og:title" content="Circlaud - An Interactive Ambient Sound Experience">
+    <meta property="og:description" content="Immerse yourself in a generative audio-visual world. Click to create evolving soundscapes.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pirillo.com/arcade/circlaud.html">
+    <meta property="og:image" content="https://pirillo.com/arcade/images/circlaud.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@ChrisPirillo">
+    <meta name="twitter:title" content="Circlaud - An Interactive Ambient Sound Experience">
+    <meta name="twitter:description" content="Immerse yourself in a generative audio-visual world. Click to create evolving soundscapes.">
+    <meta name="twitter:image" content="https://pirillo.com/arcade/images/circlaud.png">
+
+    <!-- 
+      Performance Optimization: Preconnect to third-party origins to speed up initial connection.
+      This warms up the connection to Google Fonts and Google Analytics ahead of time.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+
+    <!-- 
+      Performance Optimization: Preload the font stylesheet as it's a critical, render-blocking resource.
+      The 'display=swap' parameter is crucial for preventing font-loading from blocking text rendering (improves LCP and avoids FOUT/FOIT).
+    -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Inter:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- 
+      Performance Optimization: A fallback for users with JavaScript disabled. The main stylesheet will load normally.
+    -->
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Inter:wght@300;400;500&display=swap">
+    </noscript>
+
+    <!-- 
+      SEO Optimization: JSON-LD Structured Data provides rich context to search engines about the page.
+    -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Circlaud - An Interactive Ambient Sound Experience",
+      "description": "Immerse yourself in Circlaud, a generative audio-visual experience. Click to create evolving soundscapes and colorful blooms.",
+      "url": "https://pirillo.com/arcade/circlaud.html",
+      "mainEntity": {
+        "@type": "CreativeWork",
+        "name": "Circlaud",
+        "description": "An interactive web application that generates ambient music and visuals based on user input.",
+        "author": {
+          "@type": "Organization",
+          "name": "Pirillo",
+          "url": "https://pirillo.com"
+        }
+      }
+    }
+    </script>
+    
+    <!-- 
+      Performance Optimization: Inlining CSS eliminates a render-blocking request for small applications.
+      This is the "Critical CSS" for this page, ensuring the initial view paints immediately.
+    -->
+    <style>
+        :root{--control-bg:rgba(20,20,30,.75);--text-primary:#e0e0e0;--text-secondary:#a0a0b0;--accent-color:#89b4fa;--border-color:rgba(255,255,255,.1);--font-family-ui:'Inter',sans-serif;--font-family-display:'Poppins',sans-serif;--ui-height:50px;--ui-radius:25px}*,:after,:before{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font-family-ui);background-color:#000}#app-container{position:relative;width:100%;height:100%;cursor:pointer;transition:background-color 1.5s ease-in-out}#start-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.8);display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--text-primary);z-index:100;text-align:center;opacity:1;transition:opacity .5s ease-out;overflow:hidden}#start-overlay.hidden{opacity:0;pointer-events:none}#start-overlay h1,#start-overlay p{font-family:var(--font-family-display);z-index:2}#start-overlay h1{font-size:3rem;font-weight:400;margin-bottom:.5rem;letter-spacing:.05em}#start-overlay p{font-size:1.2rem;font-weight:300;color:var(--text-secondary)}.bloom{position:absolute;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) scale(0);opacity:1;animation:bloom-effect 4s cubic-bezier(.2,.8,.7,1) forwards;will-change:transform,opacity}.start-bloom{position:absolute;border-radius:50%;pointer-events:none;transform:scale(0);opacity:0;--vx:0;--vy:0;animation:start-bloom-effect 10s linear infinite;will-change:transform,opacity}@keyframes bloom-effect{0%{transform:translate(-50%,-50%) scale(0);opacity:1}50%{opacity:.7}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}@keyframes start-bloom-effect{0%{transform:translate(0,0) scale(0);opacity:0}25%{opacity:.25}50%{transform:translate(calc(var(--vx)*40px),calc(var(--vy)*40px)) scale(.8);opacity:.35}75%{opacity:.1}100%{transform:translate(calc(var(--vx)*80px),calc(var(--vy)*80px)) scale(1.2);opacity:0}}@keyframes clear-fade{to{opacity:0}}#ui-container{position:fixed;bottom:20px;right:20px;z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none}#settings-toggle-btn{width:var(--ui-height);height:var(--ui-height);background-color:var(--control-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:var(--ui-radius);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;opacity:0;transform:scale(.9);pointer-events:all;flex-shrink:0}#settings-toggle-btn.visible{opacity:.35;transform:scale(1)}#settings-toggle-btn.active{opacity:1}#settings-toggle-btn:hover{opacity:1;transform:scale(1.05)}#settings-toggle-btn svg{width:24px;height:24px;fill:currentColor}#controls{height:var(--ui-height);background-color:var(--control-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:var(--ui-radius);padding:5px;display:flex;align-items:center;gap:4px;z-index:10;box-shadow:0 4px 30px rgba(0,0,0,.2);transform-origin:right center;opacity:0;transform:scaleX(.5);transition:opacity .3s ease-out,transform .3s ease-out;pointer-events:none}#controls.visible{opacity:1;transform:scaleX(1);pointer-events:all}.control-group{position:relative;display:flex;align-items:center}.control-button{background:0 0;border:none;color:var(--text-secondary);cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background-color .2s,color .2s}.control-button svg{width:22px;height:22px;fill:currentColor}.control-button:hover{background-color:rgba(255,255,255,.1);color:var(--text-primary)}.control-group .tooltip{position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background-color:#111;color:#eee;padding:4px 8px;border-radius:4px;font-size:.8rem;white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;pointer-events:none}.control-group:hover .tooltip{opacity:1;visibility:visible}.custom-select{position:relative}.custom-select-options{position:absolute;bottom:115%;left:50%;z-index:100;background-color:var(--control-bg);backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:12px;padding:5px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transform-origin:bottom center;transform:translateX(-50%) scale(.9);transition:opacity .2s ease,transform .2s ease;pointer-events:none}.custom-select-options.visible{opacity:1;transform:translateX(-50%) scale(1);pointer-events:all}.custom-select-option{padding:8px 16px;color:var(--text-secondary);cursor:pointer;border-radius:8px;font-size:.9rem;white-space:nowrap}.custom-select-option:hover{background-color:rgba(255,255,255,.1);color:var(--text-primary)}select{display:none}@media (max-width:768px){#start-overlay h1{font-size:2rem}#start-overlay p{font-size:1rem}}
+    </style>
+</head>
+<body>
+
+    <!-- 
+      SEO Optimization: Using semantic <main> tag for the primary content of the page.
+      This clearly defines the main interactive area for search engines and assistive technologies.
+    -->
+    <main id="app-container">
+        <!-- 
+          SEO Optimization: This section acts as the initial header/introduction for the content.
+        -->
+        <section id="start-overlay">
+            <!-- 
+              SEO Optimization: The single <h1> tag clearly states the main topic of the page.
+            -->
+            <h1>Circlaud</h1>
+            <p>Click anywhere to begin the experience.</p>
+        </section>
+    </main>
+
+    <!-- 
+      SEO Optimization: Using a <footer> for peripheral information like controls.
+      The <nav> element semantically represents the main navigation/controls for the application.
+    -->
+    <footer id="ui-container">
+        <nav id="controls" aria-label="Experience Controls">
+            <!-- Mood Selector -->
+            <div class="control-group">
+                <div class="custom-select" data-select-id="mood-select">
+                    <button class="control-button" aria-label="Change Mood">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    </button>
+                    <div class="custom-select-options"></div>
+                </div>
+                <select id="mood-select" aria-label="Select Mood"></select>
+                <span class="tooltip">Change Mood</span>
+            </div>
+            <!-- Shuffle -->
+            <div class="control-group">
+                <button class="control-button" id="shuffle-btn" aria-label="Shuffle Mood">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M10.59 9.17L5.41 4L4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                </button>
+                 <span class="tooltip">Shuffle Mood</span>
+            </div>
+            <!-- Delay Menu -->
+             <div class="control-group">
+                <div class="custom-select" data-select-id="delay-select">
+                    <button class="control-button" aria-label="Adjust Delay">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                    </button>
+                    <div class="custom-select-options"></div>
+                </div>
+                <select id="delay-select" aria-label="Select playback delay"></select>
+                <span class="tooltip">Adjust Delay</span>
+            </div>
+            <!-- Clear -->
+            <div class="control-group">
+                <button class="control-button" id="clear-btn" aria-label="Clear Screen">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+                 <span class="tooltip">Clear</span>
+            </div>
+            <!-- Sleep Timer -->
+            <div class="control-group">
+                 <div class="custom-select" data-select-id="sleep-timer">
+                    <button class="control-button" aria-label="Set Sleep Timer">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true">
+                           <path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/>
+                        </svg>
+                    </button>
+                    <div class="custom-select-options"></div>
+                </div>
+                <select id="sleep-timer" aria-label="Set sleep timer duration">
+                    <option value="0">Off</option>
+                    <option value="300">5 min</option>
+                    <option value="900">15 min</option>
+                    <option value="1800">30 min</option>
+                    <option value="3600">1 hour</option>
+                </select>
+                 <span class="tooltip">Sleep Timer</span>
+            </div>
+        </nav>
+        <div id="settings-toggle-btn" role="button" aria-haspopup="true" aria-controls="controls" aria-expanded="false" aria-label="Toggle Settings Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.44,0.17-0.48,0.41L9.2,5.77C8.61,6.01,8.08,6.33,7.58,6.71L5.2,5.75C4.98,5.68,4.73,5.75,4.61,5.97L2.69,9.28 c-0.11,0.2-0.06,0.47,0.12,0.61l2.03,1.58C4.78,11.76,4.76,12.08,4.76,12.4c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.04,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.48-0.41l0.36-2.54c0.59-0.24,1.12-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0.01,0.59-0.22l1.92-3.32c0.11-0.2,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+        </div>
+    </footer>
+
+    <!-- 
+      The main application script. It is placed at the end of the <body> so it doesn't block HTML parsing.
+      It will execute after the DOM is ready.
+    -->
+    <script>
+    (function() {
+        'use strict';
+
+        // --- DOM Element References ---
+        const appContainer = document.getElementById('app-container');
+        const startOverlay = document.getElementById('start-overlay');
+        const controls = document.getElementById('controls');
+        const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+        const moodSelect = document.getElementById('mood-select');
+        const sleepTimerSelect = document.getElementById('sleep-timer');
+        const delaySelect = document.getElementById('delay-select');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        
+        // --- Core Application State ---
+        let audioCtx;
+        let mainGain;
+        let compressor;
+        let activeNotes = [];
+        let sleepTimerId = null;
+        let idleTimerId = null;
+        let isIdle = false;
+        let backgroundAnimationInterval = null;
+
+        const appState = {
+            currentMoodIndex: 0,
+            delay: 5,
+            isInitialized: false,
+        };
+
+        /* Performance Annotation: Simulating code splitting.
+          In a production build system (e.g., Webpack, Vite), the audio synthesis logic
+          could be dynamically imported to reduce the initial bundle size.
+          Example: const { playNote } = await import('./audio-engine.js');
+        */
+        const auroraTimbre = { type: 'sine', attack: 0.1, decay: 2.0, sustain: 0.5, release: 3.0 };
+        const MOODS = [
+            { name: 'Aurora', scale: [48, 52, 55, 57, 60, 64, 67], timbre: auroraTimbre, palette: { bg: '#1a2a3a', blooms: ['#a8d8ea', '#d3e8f0', '#ffffff'] } },
+            { name: 'Eventide', scale: [43, 47, 50, 52, 55, 59, 62], timbre: auroraTimbre, palette: { bg: '#4d2a41', blooms: ['#fca369', '#d66d75', '#e9a8a9'] } },
+            { name: 'Crystal', scale: [53, 57, 60, 62, 65], timbre: auroraTimbre, palette: { bg: '#f0f4f8', blooms: ['#a7c5eb', '#89a5d1', '#c7dcf7'] } },
+            { name: 'Subterranean', scale: [38, 41, 43, 45, 48, 50], timbre: auroraTimbre, palette: { bg: '#232a34', blooms: ['#4f5b66', '#a9b4c2', '#768595'] } },
+            { name: 'Ritual', scale: [45, 48, 50, 52, 55], timbre: auroraTimbre, palette: { bg: '#402a2a', blooms: ['#b97b56', '#e7a977', '#f8d3b4'] } },
+            { name: 'Playful', scale: [58, 62, 65, 67, 70, 74], timbre: auroraTimbre, palette: { bg: '#fffde7', blooms: ['#80deea', '#ffcc80', '#ffab91'] } },
+            { name: 'Industrial', scale: [49, 50, 53, 54, 58, 59], timbre: auroraTimbre, palette: { bg: '#373737', blooms: ['#e0e0e0', '#9e9e9e', '#616161'] } },
+            { name: 'Aquatic', scale: [51, 55, 58, 60, 63, 67], timbre: auroraTimbre, palette: { bg: '#0b3948', blooms: ['#4db6ac', '#80cbc4', '#b2dfdb'] } },
+            { name: 'Celestial', scale: [48, 50, 52, 54, 56, 58], timbre: auroraTimbre, palette: { bg: '#0f0f1e', blooms: ['#c5cae9', '#9fa8da', '#e8eaf6'] } },
+            { name: 'Forestal', scale: [43, 47, 49, 52, 54, 55], timbre: auroraTimbre, palette: { bg: '#2d3a2d', blooms: ['#a5d6a7', '#81c784', '#c8e6c9'] } },
+            { name: 'Nostalgic', scale: [53, 57, 60, 65, 69], timbre: auroraTimbre, palette: { bg: '#fdf6e3', blooms: ['#93a1a1', '#859900', '#b58900'] } },
+            { name: 'Unison', scale: [48, 52, 55, 57, 60], timbre: auroraTimbre, palette: { bg: '#263238', blooms: ['#80cbc4', '#4dd0e1', '#b3e5fc'] } },
+        ];
+
+        function midiToFreq(midi) { return Math.pow(2, (midi - 69) / 12) * 440; }
+
+        function playNote(noteMidi, panValue, volume) {
+            if (!audioCtx || !mainGain) return;
+            const now = audioCtx.currentTime;
+            const timbre = MOODS[appState.currentMoodIndex].timbre;
+            const osc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            const panner = audioCtx.createStereoPanner();
+            osc.type = timbre.type;
+            osc.frequency.setValueAtTime(midiToFreq(noteMidi), now);
+            panner.pan.setValueAtTime(panValue, now);
+            noteGain.gain.setValueAtTime(0, now);
+            noteGain.gain.linearRampToValueAtTime(volume, now + timbre.attack);
+            noteGain.gain.linearRampToValueAtTime(volume * timbre.sustain, now + timbre.attack + timbre.decay);
+            noteGain.gain.linearRampToValueAtTime(0, now + timbre.attack + timbre.decay + timbre.release);
+            osc.connect(noteGain);
+            noteGain.connect(panner);
+            panner.connect(mainGain);
+            osc.start(now);
+            osc.stop(now + timbre.attack + timbre.decay + timbre.release + 0.1);
+        }
+
+        function createBloom(x, y, mood) {
+            const bloom = document.createElement('div');
+            const size = Math.random() * 100 + 150;
+            const colors = mood.palette.blooms;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            bloom.className = 'bloom';
+            bloom.style.left = `${x}px`;
+            bloom.style.top = `${y}px`;
+            bloom.style.width = `${size}px`;
+            bloom.style.height = `${size}px`;
+            bloom.style.backgroundColor = color;
+            appContainer.appendChild(bloom);
+            bloom.addEventListener('animationend', () => bloom.remove());
+        }
+
+        function handleMoodChange() {
+            appState.currentMoodIndex = parseInt(moodSelect.value, 10);
+            const mood = MOODS[appState.currentMoodIndex];
+            appContainer.style.backgroundColor = mood.palette.bg;
+        }
+        
+        function shuffleMood() {
+            let newIndex;
+            do { newIndex = Math.floor(Math.random() * MOODS.length); } while (newIndex === appState.currentMoodIndex);
+            moodSelect.value = newIndex;
+            moodSelect.dispatchEvent(new Event('change'));
+        }
+
+        function clearScreen() {
+            activeNotes.forEach(note => { if (note.timerId) clearTimeout(note.timerId); });
+            activeNotes = [];
+            document.querySelectorAll('.bloom').forEach(bloom => {
+                const computedStyle = window.getComputedStyle(bloom);
+                bloom.style.transform = computedStyle.transform;
+                bloom.style.opacity = computedStyle.opacity;
+                bloom.style.animation = 'clear-fade 2s forwards';
+            });
+        }
+        
+        function handleInteraction(e) {
+            if (!appState.isInitialized) return;
+
+            const target = e.target;
+            document.querySelectorAll('.custom-select-options.visible').forEach(options => {
+                if (!options.parentElement.contains(target)) {
+                    options.classList.remove('visible');
+                }
+            });
+
+            if (controls.classList.contains('visible') && !controls.contains(target) && !settingsToggleBtn.contains(target)) {
+                 controls.classList.remove('visible');
+                 settingsToggleBtn.classList.remove('active');
+                 settingsToggleBtn.setAttribute('aria-expanded', 'false');
+            }
+            
+            if (target && typeof target.closest === 'function' && target.closest('#ui-container')) {
+                 resetIdleTimer();
+                 return;
+            }
+
+            const pos = e.touches ? e.touches[0] : e;
+            const mood = MOODS[appState.currentMoodIndex];
+            const scale = mood.scale;
+            const yRatio = 1 - (pos.clientY / window.innerHeight);
+            const xRatio = pos.clientX / window.innerWidth;
+            const pan = (xRatio * 2) - 1;
+            const noteIndex = Math.floor(yRatio * scale.length);
+            const noteMidi = scale[Math.min(noteIndex, scale.length - 1)];
+            // --- CHANGE: Reduced initial note volume ---
+            const noteVolume = 0.5;
+            playNote(noteMidi, pan, noteVolume);
+            createBloom(pos.clientX, pos.clientY, mood);
+            const note = { midi: noteMidi, pan: pan, volume: noteVolume, x: pos.clientX, y: pos.clientY, timerId: null };
+            activeNotes.push(note);
+            scheduleRepeat(note);
+            resetIdleTimer();
+        }
+
+        function scheduleRepeat(note) {
+            if (!activeNotes.includes(note)) return;
+            const eccentricDelay = appState.delay * (1 + (Math.random() - 0.5) * 0.1);
+            note.timerId = setTimeout(() => {
+                note.volume *= 0.75;
+                if (note.volume < 0.01) {
+                    activeNotes.splice(activeNotes.indexOf(note), 1);
+                    return;
+                }
+                const mood = MOODS[appState.currentMoodIndex];
+                playNote(note.midi, note.pan, note.volume);
+                createBloom(note.x, note.y, mood);
+                scheduleRepeat(note);
+            }, eccentricDelay * 1000);
+        }
+
+        function handleSleepTimer() {
+            if (sleepTimerId) clearTimeout(sleepTimerId);
+            const duration = parseInt(sleepTimerSelect.value, 10);
+            if (duration > 0 && mainGain) {
+                sleepTimerId = setTimeout(() => {
+                    mainGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.0);
+                }, duration * 1000);
+            }
+        }
+        
+        function resetIdleTimer() {
+            isIdle = false;
+            clearTimeout(idleTimerId);
+            idleTimerId = setTimeout(() => { isIdle = true; evolve(); }, 15000);
+        }
+
+        function evolve() {
+            if (!isIdle) return;
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+            handleInteraction({ clientX: randomX, clientY: randomY, target: appContainer });
+            setTimeout(evolve, (Math.random() * 4000) + 2000);
+        }
+
+        /**
+         * Creates a gentle, looping bloom animation on the start screen for visual interest.
+         */
+        function startBackgroundAnimation() {
+            if (backgroundAnimationInterval) clearInterval(backgroundAnimationInterval);
+
+            const createStartBloom = () => {
+                const bloom = document.createElement('div');
+                const size = Math.random() * 250 + 150; // Larger, more subtle blooms
+                const colors = ['#a8d8ea', '#d3e8f0', '#ffffff', '#fca369', '#d66d75', '#a7c5eb', '#89a5d1'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                bloom.className = 'start-bloom';
+                bloom.style.left = `${Math.random() * 100}vw`;
+                bloom.style.top = `${Math.random() * 100}vh`;
+                bloom.style.width = `${size}px`;
+                bloom.style.height = `${size}px`;
+                bloom.style.backgroundColor = color;
+                bloom.style.animationDelay = `${Math.random() * 10}s`;
+
+                // Set random velocity for the drift animation
+                const vx = Math.random() * 2 - 1; // Random number between -1 and 1
+                const vy = Math.random() * 2 - 1; // Random number between -1 and 1
+                bloom.style.setProperty('--vx', vx);
+                bloom.style.setProperty('--vy', vy);
+                
+                startOverlay.prepend(bloom); // Prepend to keep them behind the text
+                
+                // Self-remove after one full animation loop to prevent DOM clutter
+                setTimeout(() => {
+                    bloom.remove();
+                }, 10000); // Match animation duration
+            };
+
+            // Create a new bloom more frequently
+            backgroundAnimationInterval = setInterval(createStartBloom, 1500);
+            // Create a few more initial blooms
+            for(let i=0; i < 5; i++) {
+                createStartBloom();
+            }
+        }
+        
+        /* Performance Annotation: Simulating code splitting.
+          This UI-specific logic could also be in its own module and imported.
+          Example: const { initializeCustomSelects } = await import('./ui-controls.js');
+        */
+        function initializeCustomSelects() {
+            document.querySelectorAll('.custom-select').forEach(wrapper => {
+                const selectId = wrapper.dataset.selectId;
+                const hiddenSelect = document.getElementById(selectId);
+                if (!hiddenSelect) return;
+
+                const triggerButton = wrapper.querySelector('.control-button');
+                const optionsContainer = wrapper.querySelector('.custom-select-options');
+
+                optionsContainer.innerHTML = '';
+                Array.from(hiddenSelect.options).forEach(option => {
+                    const customOption = document.createElement('div');
+                    customOption.classList.add('custom-select-option');
+                    customOption.textContent = option.textContent;
+                    customOption.dataset.value = option.value;
+                    optionsContainer.appendChild(customOption);
+                });
+
+                triggerButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isVisible = optionsContainer.classList.toggle('visible');
+                    triggerButton.setAttribute('aria-expanded', isVisible);
+                });
+
+                optionsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('custom-select-option')) {
+                        const selectedValue = e.target.dataset.value;
+                        hiddenSelect.value = selectedValue;
+                        hiddenSelect.dispatchEvent(new Event('change'));
+                        optionsContainer.classList.remove('visible');
+                        triggerButton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+        }
+
+
+        function init() {
+            if (appState.isInitialized) return;
+            // Stop the background animation when the app starts
+            if(backgroundAnimationInterval) clearInterval(backgroundAnimationInterval);
+            document.querySelectorAll('.start-bloom').forEach(b => b.remove());
+
+            // Performance: AudioContext is created only after first user interaction, which is a best practice.
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            audioCtx.resume();
+            mainGain = audioCtx.createGain();
+            compressor = audioCtx.createDynamicsCompressor();
+
+            // --- CHANGE: More aggressive compressor settings for limiting ---
+            compressor.threshold.setValueAtTime(-50, audioCtx.currentTime); // Engage compressor earlier
+            compressor.knee.setValueAtTime(40, audioCtx.currentTime);      // Softer knee for smoother transition
+            compressor.ratio.setValueAtTime(12, audioCtx.currentTime);     // Stronger compression ratio
+            compressor.attack.setValueAtTime(0.003, audioCtx.currentTime); // Fast attack
+            compressor.release.setValueAtTime(0.2, audioCtx.currentTime);  // Slightly faster release
+            
+            mainGain.connect(compressor);
+            compressor.connect(audioCtx.destination);
+            
+            MOODS.forEach((mood, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = mood.name;
+                moodSelect.appendChild(option);
+            });
+            
+            [2, 3, 4, 5, 6, 7, 8].forEach(sec => {
+                const option = document.createElement('option');
+                option.value = sec;
+                option.textContent = `${sec} sec`;
+                if(sec === 5) option.selected = true;
+                delaySelect.appendChild(option);
+            });
+            
+            initializeCustomSelects();
+
+            moodSelect.addEventListener('change', handleMoodChange);
+            sleepTimerSelect.addEventListener('change', handleSleepTimer);
+            delaySelect.addEventListener('change', e => appState.delay = parseFloat(e.target.value));
+            shuffleBtn.addEventListener('click', shuffleMood);
+            clearBtn.addEventListener('click', clearScreen);
+            
+            appContainer.addEventListener('mousedown', handleInteraction);
+            appContainer.addEventListener('touchstart', handleInteraction, {passive: true});
+            
+            settingsToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isVisible = controls.classList.toggle('visible');
+                settingsToggleBtn.classList.toggle('active');
+                settingsToggleBtn.setAttribute('aria-expanded', isVisible);
+            });
+            
+            document.querySelector('#ui-container').addEventListener('mousedown', e => e.stopPropagation());
+            document.querySelector('#ui-container').addEventListener('touchstart', e => e.stopPropagation());
+
+            appState.isInitialized = true;
+            settingsToggleBtn.classList.add('visible');
+            startOverlay.classList.add('hidden');
+            handleMoodChange();
+            resetIdleTimer();
+        }
+        
+        startOverlay.addEventListener('click', init, { once: true });
+
+        // --- Start background animation on page load ---
+        startBackgroundAnimation();
+
+    })();
+    </script>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CQ4D3VQ3L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1CQ4D3VQ3L');
+    </script>
+
+</body>
+</html>
