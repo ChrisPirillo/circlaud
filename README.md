@@ -5,4 +5,6 @@ Immerse yourself in Circlaud, a generative audio-visual experience. Click to cre
 
 ---
 
+![Screenshot](https://github.com/ChrisPirillo/circlaud/blob/main/assets/screenshot.png?raw=true)
+
 * Try it now: [https://pirillo.com/arcade/circlaud.html](https://pirillo.com/arcade/circlaud.html)
